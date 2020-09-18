@@ -19,11 +19,10 @@ def readFromFile(path):
 def run(true_value: str):
 	if true_value == "single":
 		# assumption: error measurement is constant
-		true_value = input("true value: ")
-		initial_estimate = input("initial estimate: ")
-		initial_estimate_error = input("initial estimate error: ")
-		initial_measurement = input("initial measurement: ")
-		measurement_error = input("measurement error: ")
+		initial_estimate = float(input("initial estimate: "))
+		initial_estimate_error = float(input("initial estimate error: "))
+		initial_measurement = float(input("initial measurement: "))
+		measurement_error = float(input("measurement error: "))
 		
 		previous_estimate = initial_estimate
 		previous_estimate_error = initial_estimate_error
@@ -34,9 +33,10 @@ def run(true_value: str):
 			estimate = calculate_estimate(previous_estimate, kalman_gain, measurement)
 			estimate_error = calculate_error_estimate(kalman_gain, previous_estimate_error)
 
-			print("kalman gain %f".format(kalman_gain))
-			print("estimate %f".format(estimate))
-			print("estimate error %f".format(estimate_error))
+			print("kalman gain %f" % kalman_gain)
+			print("estimate %f" % estimate)
+			print("estimate error %f" % estimate_error)
+			print("=================")
 			
 			previous_estimate = estimate
 			previous_estimate_error = estimate_error
