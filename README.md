@@ -30,13 +30,13 @@ There are three main calculations:
 <i>Examples</i>
 
 Suppose that we'd like to measure a temperature. Here are some basic information:
-- The true temperature: 72
-- Initial estimate: 68
-- Initial estimate error: 2
-- Initial measurement: 75
-- Measurement error: 4
+- The true temperature: `72`
+- Initial estimate: `68`
+- Initial estimate error: `2`
+- Initial measurement: `75`
+- Measurement error: `4`
 
-The measured temperature values are 75, 71, 70, and 74.
+The measured temperature values are `75`, `71`, `70`, and `74`.
 
 We'd like to estimate the true temperature value based on the above data.
 
@@ -93,4 +93,4 @@ Performing Kalman filter calculation will yield the following results.
   </tr>
 </table>
 
-According to the given data, the true value estimate is 71.
+According to the given data, the true value estimate is `71`.
