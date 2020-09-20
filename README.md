@@ -1,4 +1,4 @@
-# Kalman filter
+# Kalman Filter
 
 ## What is it?
 
