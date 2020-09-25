@@ -20,6 +20,22 @@ def calculate_predicted_process_covariance(previous_process_covariance):
 	+ DynamicStateMultipleTrueValues1D.PREDICTED_ESTIMATE_ERROR_MATRIX
 
 
+def calculate_kalman_gain(predicted_process_covariance):
+	observation_errors_covariance = np.array([[DynamicStateMultipleTrueValues1D.OBSERVATION_ERROR_POSITION, 0], 
+												[0, DynamicStateMultipleTrueValues1D.OBSERVATION_ERROR_VELOCITY]])
+
+	transformer_matrix_H = np.array([[1.0, 0.0], [0.0, 1.0]])
+
+	where_are_NaNs = isnan(a)
+	a[where_are_NaNs] = 0
+
+	kalman_gain = predicted_process_covariance.dot(transformer_matrix_H.transpose()) \
+	/ ((transformer_matrix_H.dot(predicted_process_covariance)).dot(transformer_matrix_H.transpose()) \
+		+ observation_errors_covariance)
+
+	kalman_gain[np.isnan(kalman_gain)] = 0.0
+	return kalman_gain
+
 def calculate_predicted_state(previous_state):
 	return DynamicStateMultipleTrueValues1D.STATE_MULTIPLIER_MATRIX.dot(previous_state) \
 	+ DynamicStateMultipleTrueValues1D.CONTROL_VARIABLE_MULTIPLIER_MATRIX.dot(DynamicStateMultipleTrueValues1D.CONTROL_VARIABLE_MATRIX) \
@@ -43,7 +59,10 @@ def estimate_multiple_true_value_1d():
 
 		# predicted process covariance
 		predicted_process_covariance = calculate_predicted_process_covariance(previous_process_covariance)
-		print(predicted_process_covariance)
+
+		# kalman gain
+		kalman_gain = calculate_kalman_gain(predicted_process_covariance)
+
 
 def readFromFile(path: str) -> [float]:
 	with open(path, "r") as f:
