@@ -6,8 +6,10 @@ An iterative mathematical process applied on consecutive data inputs to quickly 
 
 ## Currently available modules:
 
-- Static model => the true value of the object being measured is constant
+- Static state => the true value of the object being measured is constant
    - Estimates a single true value
+- Dynamic state => the true value of the object being measured is governed by a certain equation
+   - Estimates multiple true values
 
 ## How it works
 
