@@ -89,6 +89,13 @@ def estimate_multiple_true_value_1d():
 		# updated process covariance
 		current_process_covariance = calculate_current_process_covariance(predicted_process_covariance, kalman_gain)
 		
+		# current becomes previous for the next iteration
+		previous_state = current_state_estimate
+		previous_process_covariance = current_process_covariance
+
+		print("Current state estimate")
+		print(current_state_estimate)
+		print("======================")
 		
 
 def readFromFile(path: str) -> [float]:
