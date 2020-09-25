@@ -1,5 +1,7 @@
-def estimate_multiple_true_value_1d(initial_acceleration, time_diff, process_errors, observation_errors):
-	
+def estimate_multiple_true_value_1d(initial_conditions, process_errors, observation_errors):
+	measurements = readFromFile('../resources/example_dynamic_state_1d')
+	# predicted state
+
 
 def readFromFile(path: str) -> [float]:
 	with open(path, "r") as f:
@@ -14,9 +16,12 @@ def run(true_value: str):
 		dimensions = int(input("dimension: "))
 
 		if dimensions == 1:
-			# only in the x axis
+			# only in one axis
+			initial_estimate_position = float(input("initial estimate for position: "))
+			initial_estimate_velocity = float(input("initial estimate for velocity: "))
 			initial_acceleration = float(input("initial acceleration: "))
 			time_diff = float(input("time difference: "))
+			initial_conditions = [initial_estimate_position, initial_estimate_velocity, initial_acceleration, time_diff]
 
 			# process errors in process covariance matrix
 			process_error_position = float(input("process error for position: "))
@@ -28,4 +33,4 @@ def run(true_value: str):
 			observation_error_velocity = float(input("observation error for velocity: "))
 			observation_errors = [observation_error_position, observation_error_velocity]
 
-			estimate_multiple_true_value_1d(initial_acceleration, time_diff, process_errors, observation_errors)
+			estimate_multiple_true_value_1d(initial_conditions, process_errors, observation_errors)
