@@ -9,11 +9,10 @@ if __name__ == "__main__":
 	parser.add_argument('--true_value', help='single or multiple')
 	
 	args = parser.parse_args()
-	state = args.process
+	state = args.state
 	true_value = args.true_value
 
 	if state == "static":
 		static_state.run(true_value)
 	elif state == "dynamic":
 		dynamic_state.run(true_value)
-		initial_estimate = float(input("initial estimate: "))

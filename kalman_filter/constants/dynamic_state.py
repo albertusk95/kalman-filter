@@ -26,5 +26,6 @@ class DynamicStateMultipleTrueValues1D(object):
 	# process errors (in model)
 	STATE_PREDICTION_ERROR_MATRIX = np.array([[0.0], [0.0]])
 	PREDICTED_ESTIMATE_ERROR_MATRIX = np.array([[0.0, 0.0], [0.0, 0.0]])
+	NEW_OBSERVATION_ERROR_MATRIX = np.array([[0.0], [0.0]])
 
 	MEASUREMENT_DATA_FILE = 'resources/example_dynamic_state_1d'
