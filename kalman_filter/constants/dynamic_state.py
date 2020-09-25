@@ -19,8 +19,10 @@ class DynamicStateMultipleTrueValues1D(object):
 	STATE_MATRIX_MULTIPLIER = np.array([[1, TIME_DIFF], [0, 1]])
 
 	# matrix B
-	CONTROL_VARIABLE_MATRIX_MULTIPLIER = np.array([[0.5*TIME_DIFF*TIME_DIFF, TIME_DIFF]])
+	CONTROL_VARIABLE_MATRIX_MULTIPLIER = np.array([[0.5*TIME_DIFF*TIME_DIFF], [TIME_DIFF]])
 
 	CONTROL_VARIABLE_MATRIX = np.array([[INITIAL_ACCELERATION]])
 
 	STATE_PREDICTION_ERROR_MATRIX = np.array([[0.0], [0.0]])
+
+	MEASUREMENT_DATA_FILE = 'resources/example_dynamic_state_1d'

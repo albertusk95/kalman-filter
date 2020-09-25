@@ -1,20 +1,22 @@
 import numpy as np
 
-from constants.dynamic_state import DynamicStateMultipleTrueValues1D
+from kalman_filter.constants.dynamic_state import DynamicStateMultipleTrueValues1D
 
 def calculate_predicted_state(previous_state):
-
+	return DynamicStateMultipleTrueValues1D.STATE_MATRIX_MULTIPLIER.dot(previous_state) \
+	+ DynamicStateMultipleTrueValues1D.CONTROL_VARIABLE_MATRIX_MULTIPLIER.dot(DynamicStateMultipleTrueValues1D.CONTROL_VARIABLE_MATRIX) \
+	+ DynamicStateMultipleTrueValues1D.STATE_PREDICTION_ERROR_MATRIX
 
 
 def estimate_multiple_true_value_1d():
-	measurements = readFromFile('../resources/example_dynamic_state_1d')
+	measurements = readFromFile(DynamicStateMultipleTrueValues1D.MEASUREMENT_DATA_FILE)
 
 	for measurement in measurements:
 		position, velocity = measurement.split(",")
 		position, velocity = float(position), float(velocity)
 
 		# create the numpy array
-		previous_state = np.array([[position, velocity]])
+		previous_state = np.array([[position], [velocity]])
 
 		# calculate predicted state
 		predicted_state = calculate_predicted_state(previous_state)
@@ -23,7 +25,7 @@ def estimate_multiple_true_value_1d():
 def readFromFile(path: str) -> [float]:
 	with open(path, "r") as f:
 		measurements = f.readlines()
-	return [float(x.strip()) for x in measurements]
+	return [x.strip() for x in measurements]
 
 def run(true_value: str):
 	if true_value == "multiple":
