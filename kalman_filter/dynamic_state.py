@@ -1,6 +1,16 @@
+import math
 import numpy as np
 
 from kalman_filter.constants.dynamic_state import DynamicStateMultipleTrueValues1D
+
+def calculate_initial_process_covariance():
+	cov = DynamicStateMultipleTrueValues1D.PROCESS_ERROR_POSITION * DynamicStateMultipleTrueValues1D.PROCESS_ERROR_VELOCITY
+
+	return np.array([
+		[math.pow(DynamicStateMultipleTrueValues1D.PROCESS_ERROR_POSITION, 2), cov], 
+		[cov, math.pow(DynamicStateMultipleTrueValues1D.PROCESS_ERROR_VELOCITY, 2)]
+	])
+
 
 def calculate_predicted_state(previous_state):
 	return DynamicStateMultipleTrueValues1D.STATE_MATRIX_MULTIPLIER.dot(previous_state) \
@@ -11,7 +21,9 @@ def calculate_predicted_state(previous_state):
 def estimate_multiple_true_value_1d():
 	measurements = readFromFile(DynamicStateMultipleTrueValues1D.MEASUREMENT_DATA_FILE)
 
-	for measurement in measurements:
+	initial_process_covariance = calculate_initial_process_covariance()
+
+ 	for measurement in measurements:
 		position, velocity = measurement.split(",")
 		position, velocity = float(position), float(velocity)
 
@@ -20,6 +32,7 @@ def estimate_multiple_true_value_1d():
 
 		# calculate predicted state
 		predicted_state = calculate_predicted_state(previous_state)
+
 
 
 def readFromFile(path: str) -> [float]:
