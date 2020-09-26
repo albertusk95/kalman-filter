@@ -13,7 +13,7 @@ An iterative mathematical process applied on consecutive data inputs to quickly 
 
 ## How it works
 
-### Static state
+### STATIC STATE
 
 #### A) Single true value
 
@@ -97,9 +97,9 @@ Performing Kalman filter calculation will yield the following results.
 
 According to the given data, the true value estimate is `71`.
 
-### Dynamic state
+### DYNAMIC STATE
 
-#### A) Multiple true value
+#### A) Multiple true values
 
 Suppose we're going to estimate the true value of position & velocity of a moving object in a single direction (x-axis).
 
