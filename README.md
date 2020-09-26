@@ -13,7 +13,7 @@ An iterative mathematical process applied on consecutive data inputs to quickly 
 
 ## How it works
 
-### Static model
+### Static state
 
 #### A) Single true value
 
@@ -96,3 +96,71 @@ Performing Kalman filter calculation will yield the following results.
 </table>
 
 According to the given data, the true value estimate is `71`.
+
+### Dynamic state
+
+#### A) Multiple true value
+
+Suppose we're going to estimate the true value of position & velocity of a moving object in a single direction (x-axis).
+
+Here are the general steps in applying Kalman filter. Note that variables with all capital letters denote matrix (ex: `VAR_NAME` refers to a matrix called `VAR_NAME`)
+
+- Fill in all the required input values in <a href="https://github.com/albertusk95/kalman-filter/blob/master/kalman_filter/constants/dynamic_state_constants.py">DynamicStateMultipleTrueValues1D</a>
+
+- Taking the initial estimate of position & velocity as the `PREVIOUS_STATE` and the initial estimate error as the `PREVIOUS_STATE_ESTIMATE_ERROR`, calculate the predicted state by the following.
+
+```
+PREDICTED_STATE_ESTIMATE = STATE_MULTIPLIER * PREVIOUS_STATE 
+                              + CONTROL_VARIABLE_MULTIPLIER * CONTROL_VARIABLE \
+                              + STATE_PREDICTION_PROCESS_ERROR
+                              
+PREDICTED_STATE_ESTIMATE_ERROR = STATE_MULTIPLIER * PREVIOUS_STATE_ESTIMATE_ERROR * STATE_MULTIPLIER_transposed \
+                                    + PREDICTED_STATE_ESTIMATE_ERROR_PROCESS_ERROR
+```
+
+- Calculate the Kalman gain
+
+```
+OBSERVATION_ERRORS_COVARIANCE = [[(OBSERVATION_ERROR_POSITION)^2, 0.0] 
+                                 [0.0, (OBSERVATION_ERROR_VELOCITY)^2)]]
+
+TRANSFORMER_H = np.array([[1.0, 0.0], [0.0, 1.0]])
+
+KALMAN_GAIN = (PREDICTED_STATE_ESTIMATE_ERROR * TRANSFORMER_H_TRANSPOSED) \
+               / ((TRANSFORMER_H * PREDICTED_STATE_ESTIMATE_ERROR)) * TRANSFORMER_H_TRANSPOSED) \
+               + OBSERVATION_ERRORS_COVARIANCE)
+```
+
+- Calculate observations where non-observation errors are included
+
+```
+TRANSFORMER_C = [[1.0, 0.0]
+                 [0.0, 1.0]]
+
+OBSERVATION_WITH_NON_OBS_ERRORS = (TRANSFORMER_C * OBSERVATION) + NEW_OBSERVATION_PROCESS_ERROR
+```
+
+- Calculate current state estimate
+
+```
+TRANSFORMER_H = [[1.0, 0.0]
+                 [0.0, 1.0]]
+                 
+OBSERVATION_AND_PREDICTED_STATE_ESTIMATE_DIFF = OBSERVATION_WITH_NON_OBS_ERRORS - (TRANSFORMER_H * PREDICTED_STATE_ESTIMATE)
+
+CURRENT_STATE_ESTIMATE = PREDICTED_STATE_ESTIMATE + (KALMAN_GAIN * OBSERVATION_AND_PREDICTED_STATE_ESTIMATE_DIFF)
+```
+
+- Calculate current state estimate error
+
+```
+TRANSFORMER_H = [[1.0, 0.0]
+                 [0.0, 1.0]]
+
+I = [[1.0, 0.0]
+     [0.0, 1.0]]
+
+CURRENT_STATE_ESTIMATE_ERROR = (I - (KALMAN_GAIN * TRANSFORMER_H)) * PREDICTED_STATE_ESTIMATE_ERROR
+```
+
+- Current state estimate & current state estimate error becomes the previous state for the next iteration. The next iteration follows the same steps as above.
