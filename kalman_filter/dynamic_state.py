@@ -1,7 +1,8 @@
 import math
 import numpy as np
 
-from kalman_filter.constants.dynamic_state import DynamicStateMultipleTrueValues1D
+from kalman_filter.constants.dynamic_state_constants import DynamicStateMultipleTrueValues1D
+
 
 def calculate_initial_process_covariance():
 	cov = DynamicStateMultipleTrueValues1D.ESTIMATE_ERROR_POSITION * DynamicStateMultipleTrueValues1D.ESTIMATE_ERROR_VELOCITY
@@ -17,7 +18,7 @@ def calculate_predicted_process_covariance(previous_process_covariance):
 	predicted_process_cov = (
 		DynamicStateMultipleTrueValues1D.STATE_MULTIPLIER_MATRIX.dot(previous_process_covariance)
 	).dot(DynamicStateMultipleTrueValues1D.STATE_MULTIPLIER_MATRIX.transpose()) \
-	+ DynamicStateMultipleTrueValues1D.PREDICTED_ESTIMATE_ERROR_MATRIX
+	+ DynamicStateMultipleTrueValues1D.PREDICTED_ESTIMATE_PROCESS_ERROR_MATRIX
 
 	np.fill_diagonal(np.fliplr(predicted_process_cov),[0.0, 0.0])
 	return predicted_process_cov
@@ -39,7 +40,7 @@ def calculate_kalman_gain(predicted_process_covariance):
 
 def calculate_observation_with_non_obs_errors(observation):
 	transformer_matrix_C = np.array([[1.0, 0.0], [0.0, 1.0]])
-	return transformer_matrix_C.dot(observation) + DynamicStateMultipleTrueValues1D.NEW_OBSERVATION_ERROR_MATRIX
+	return transformer_matrix_C.dot(observation) + DynamicStateMultipleTrueValues1D.NEW_OBSERVATION_PROCESS_ERROR_MATRIX
 
 
 def calculate_current_state_estimate(predicted_state_estimate, kalman_gain, observation_with_non_obs_errors):
@@ -51,7 +52,7 @@ def calculate_current_state_estimate(predicted_state_estimate, kalman_gain, obse
 def calculate_predicted_state(previous_state):
 	return DynamicStateMultipleTrueValues1D.STATE_MULTIPLIER_MATRIX.dot(previous_state) \
 	+ DynamicStateMultipleTrueValues1D.CONTROL_VARIABLE_MULTIPLIER_MATRIX.dot(DynamicStateMultipleTrueValues1D.CONTROL_VARIABLE_MATRIX) \
-	+ DynamicStateMultipleTrueValues1D.STATE_PREDICTION_ERROR_MATRIX
+	+ DynamicStateMultipleTrueValues1D.STATE_PREDICTION_PROCESS_ERROR_MATRIX
 
 
 def calculate_current_process_covariance(predicted_process_covariance, kalman_gain):

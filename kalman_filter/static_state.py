@@ -1,3 +1,6 @@
+from kalman_filter.constants.static_state_constants import StaticStateSingleTrueValue
+
+
 def calculate_kalman_gain(previous_estimate_error: float, measurement_error: float) -> float:
 	# KG = error_est / (error_est + error_meas)
 	return previous_estimate_error / (previous_estimate_error + measurement_error)
@@ -19,7 +22,8 @@ def estimate_single_true_value(
 	previous_estimate: float, 
 	previous_estimate_error: float, 
 	measurement_error: float):
-	measurements = readFromFile("resources/example_measurements.txt")
+	measurements = readFromFile(StaticStateSingleTrueValue.MEASUREMENT_DATA_FILE)
+
 	for measurement in measurements:
 		kalman_gain = calculate_kalman_gain(previous_estimate_error, measurement_error)
 		estimate = calculate_estimate(previous_estimate, kalman_gain, measurement)
@@ -36,11 +40,8 @@ def estimate_single_true_value(
 def run(true_value: str):
 	if true_value == "single":
 		# assumption: error measurement is constant
-		initial_estimate = float(input("initial estimate: "))
-		initial_estimate_error = float(input("initial estimate error: "))
-		measurement_error = float(input("measurement error: "))
-		
-		previous_estimate = initial_estimate
-		previous_estimate_error = initial_estimate_error
+		previous_estimate = StaticStateSingleTrueValue.INITIAL_ESTIMATE
+		previous_estimate_error = StaticStateSingleTrueValue.INITIAL_ESTIMATE_ERROR
+		measurement_error = StaticStateSingleTrueValue.MEASUREMENT_ERROR
 
 		estimate_single_true_value(previous_estimate, previous_estimate_error, measurement_error)

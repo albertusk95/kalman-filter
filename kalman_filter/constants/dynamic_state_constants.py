@@ -24,8 +24,8 @@ class DynamicStateMultipleTrueValues1D(object):
 	CONTROL_VARIABLE_MATRIX = np.array([[INITIAL_ACCELERATION]])
 
 	# process errors (in model)
-	STATE_PREDICTION_ERROR_MATRIX = np.array([[0.0], [0.0]])
-	PREDICTED_ESTIMATE_ERROR_MATRIX = np.array([[0.0, 0.0], [0.0, 0.0]])
-	NEW_OBSERVATION_ERROR_MATRIX = np.array([[0.0], [0.0]])
+	STATE_PREDICTION_PROCESS_ERROR_MATRIX = np.array([[0.0], [0.0]])
+	PREDICTED_ESTIMATE_PROCESS_ERROR_MATRIX = np.array([[0.0, 0.0], [0.0, 0.0]])
+	NEW_OBSERVATION_PROCESS_ERROR_MATRIX = np.array([[0.0], [0.0]])
 
 	MEASUREMENT_DATA_FILE = 'resources/example_dynamic_state_1d'
