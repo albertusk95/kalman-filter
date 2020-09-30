@@ -107,15 +107,15 @@ Here are the general steps in applying Kalman filter. Note that variables with a
 
 - Fill in all the required input values in <a href="https://github.com/albertusk95/kalman-filter/blob/master/kalman_filter/constants/dynamic_state_constants.py">DynamicStateMultipleTrueValues1D</a>
 
-- Taking the initial estimate of position & velocity as the `PREVIOUS_STATE` and the initial estimate error as the `PREVIOUS_STATE_ESTIMATE_ERROR`, calculate the predicted state by the following.
+- Taking the initial estimate of position & velocity as the `PREVIOUS_STATE` and the initial estimate covariance matrix as the `PREVIOUS_STATE_COVARIANCE_MATRIX`, calculate the predicted state by the following.
 
 ```
 PREDICTED_STATE_ESTIMATE = STATE_MULTIPLIER * PREVIOUS_STATE 
                               + CONTROL_VARIABLE_MULTIPLIER * CONTROL_VARIABLE \
                               + STATE_PREDICTION_PROCESS_ERROR
                               
-PREDICTED_STATE_ESTIMATE_ERROR = STATE_MULTIPLIER * PREVIOUS_STATE_ESTIMATE_ERROR * STATE_MULTIPLIER_transposed \
-                                    + PREDICTED_STATE_ESTIMATE_ERROR_PROCESS_ERROR
+PREDICTED_STATE_COVARIANCE_MATRIX = STATE_MULTIPLIER * PREVIOUS_STATE_COVARIANCE_MATRIX * STATE_MULTIPLIER_transposed \
+                                    + PREDICTED_STATE_COVARIANCE_MATRIX_PROCESS_ERROR
 ```
 
 - Calculate the Kalman gain
@@ -126,8 +126,8 @@ OBSERVATION_ERRORS_COVARIANCE = [[(OBSERVATION_ERROR_POSITION)^2, 0.0]
 
 TRANSFORMER_H = np.array([[1.0, 0.0], [0.0, 1.0]])
 
-KALMAN_GAIN = (PREDICTED_STATE_ESTIMATE_ERROR * TRANSFORMER_H_TRANSPOSED) \
-               / ((TRANSFORMER_H * PREDICTED_STATE_ESTIMATE_ERROR)) * TRANSFORMER_H_TRANSPOSED) \
+KALMAN_GAIN = (PREDICTED_STATE_COVARIANCE_MATRIX * TRANSFORMER_H_TRANSPOSED) \
+               / ((TRANSFORMER_H * PREDICTED_STATE_COVARIANCE_MATRIX)) * TRANSFORMER_H_TRANSPOSED) \
                + OBSERVATION_ERRORS_COVARIANCE)
 ```
 
@@ -160,7 +160,7 @@ TRANSFORMER_H = [[1.0, 0.0]
 I = [[1.0, 0.0]
      [0.0, 1.0]]
 
-CURRENT_STATE_ESTIMATE_ERROR = (I - (KALMAN_GAIN * TRANSFORMER_H)) * PREDICTED_STATE_ESTIMATE_ERROR
+CURRENT_STATE_ESTIMATE_COVARIANCE_MATRIX = (I - (KALMAN_GAIN * TRANSFORMER_H)) * PREDICTED_STATE_COVARIANCE_MATRIX
 ```
 
-- Current state estimate & current state estimate error becomes the previous state for the next iteration. The next iteration follows the same steps as above.
+- Current state estimate & current state estimate covariance matrix becomes the previous state for the next iteration. The next iteration follows the same steps as above.
